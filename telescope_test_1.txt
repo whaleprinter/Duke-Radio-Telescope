@@ -1,0 +1,40 @@
+Enter observing wavelength (meters) [e.g. 0.21 for Hydrogen]: Enter individual antenna diameter (meters) [e.g. 3.0]: 
+--- Loading Coordinates ---
+Antenna 1: 36.003683, -78.939523
+Antenna 2: 36.003180, -78.939853
+Antenna 3: 36.003155, -78.940800
+Antenna 4: 36.003402, -78.939250
+Antenna 5: 36.003749, -78.939594
+Antenna 6: 36.003940, -78.941067
+Antenna 7: 36.003984, -78.940606
+Antenna 8: 36.004417, -78.940431
+Antenna 9: 36.003443, -78.937817
+Antenna 10: 36.003362, -78.938182
+Antenna 11: 36.005654, -78.941005
+Antenna 12: 36.005326, -78.940791
+Antenna 13: 36.005223, -78.941038
+Antenna 14: 36.003584, -78.942798
+Antenna 15: 36.003327, -78.942204
+Antenna 16: 36.003070, -78.942624
+Successfully loaded 16 antennas.
+
+============================================
+TELESCOPE PERFORMANCE REPORT
+============================================
+Parameters:
+  Wavelength:       0.2100 m
+  Dish Diameter:    2.0 m
+  Max Baseline:     448.3 m
+  Min Baseline:     9.8 m
+--------------------------------------------
+RESOLUTION (Synthesized Beam size):
+  X-Resolution:     0.0269 deg (1.6 arcmin)
+  Y-Resolution:     0.0419 deg (2.5 arcmin)
+  Best Resolution:  0.0268 deg (1.6 arcmin)
+--------------------------------------------
+FIELD OF VIEW (Primary Beam):
+  FOV (Single Dish): 6.02 deg
+--------------------------------------------
+SENSITIVITY LIMITS:
+  Largest Visible Structure: 1.23 deg
+============================================
