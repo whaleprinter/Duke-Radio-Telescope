@@ -70,7 +70,7 @@ for i in range(len(x_ft)):
                  color='black', backgroundcolor='white')
 
 # Graph styling
-ax.set_title('Interferometer Array Geometry (Calibrated to 250ft Baseline)', fontsize=14)
+ax.set_title('Interferometer Array Layout', fontsize=14)
 ax.set_xlabel('East-West Distance (feet)')
 ax.set_ylabel('North-South Distance (feet)')
 

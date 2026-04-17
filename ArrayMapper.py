@@ -57,7 +57,7 @@ plt.plot([x_m[p1_idx], x_m[p2_idx]], [y_m[p1_idx], y_m[p2_idx]],
          'b--', linewidth=1.5, label=f'Max Baseline ($B_{{max}}$ = {max_b:.1f} m)', zorder=2)
 
 # Graph styling
-plt.title('Interferometer Array Geometry (Local Mapped to Meters)', fontsize=14)
+plt.title('Interferometer Array Geometry', fontsize=14)
 plt.xlabel('East-West Distance (meters)')
 plt.ylabel('North-South Distance (meters)')
 
