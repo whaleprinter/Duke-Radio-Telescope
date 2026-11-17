@@ -1,0 +1,70 @@
+% Extra path between two antennas for a tilted plane wave.
+% Side view looking north (east to the right).
+% Usage in the poster:  \resizebox{\linewidth}{!}{\input{figures/extra_path.tikz}}
+% Needs: \usetikzlibrary{calc,angles,quotes,arrows.meta}
+\providecolor{dukeroyal}{HTML}{00539B}
+\providecolor{dukenavy}{HTML}{012169}
+\providecolor{rust}{HTML}{A12D10}
+\providecolor{inksoft}{HTML}{6B5D50}
+\begin{tikzpicture}[
+    >={Stealth[length=7pt]},
+    ray/.style={->, dukeroyal, line width=1pt},
+    front/.style={dukeroyal, dashed, line width=0.8pt},
+    extra/.style={rust, line width=3pt, line cap=round},
+    guide/.style={inksoft, dashed, line width=0.5pt},
+    ant/.style={fill=dukenavy!15, draw=dukenavy, line width=0.6pt},
+    lbl/.style={font=\large, text=inksoft},
+  ]
+  % ---- parameters -------------------------------------------------
+  \def\th{25}      % source angle from zenith (deg)
+  \def\dx{6}       % antenna spacing (drawing units)
+  \def\L{4.2}      % length of incoming rays
+  % unit vector toward the source: s = (sin th, cos th)
+  \coordinate (s) at ({sin(\th)},{cos(\th)});
+
+  % ---- antennas and ground ---------------------------------------
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (\dx,0);
+  \draw[inksoft, line width=0.6pt] (-1.2,0) -- (\dx+1.2,0);
+
+  % foot of the wavefront on antenna 1's ray:  P = A + dx*sin(th) * s
+  \coordinate (P) at ($(A)!{\dx*sin(\th)}!($(A)+(s)$)$);
+
+  % ---- wavefront through B and P ---------------------------------
+  \draw[front] ($(B)!-0.25!(P)$) -- ($(P)!-0.12!(B)$)
+    node[pos=0, below right, lbl, text=dukeroyal] {wavefront};
+
+  % ---- extra path (the point of the figure) ----------------------
+  \draw[extra] (A) -- (P);
+  \node[rust, font=\large, anchor=west, align=left]
+    at ($(A)!0.28!(P)+(0.25,0)$) {extra path\\$=\Delta x\,\sin\theta=\Delta x\,l$};
+
+  % ---- incoming rays (parallel, from the distant source) ---------
+  \draw[ray] ($(A)+\L*(s)$) -- (A);
+  \draw[ray] ($(B)+\L*(s)$) -- (B);
+  \node[lbl, text=dukeroyal, anchor=south] at ($(B)+\L*(s)$) {source};
+
+  % right angle where the ray meets the wavefront
+  \pic[draw=dukeroyal, line width=0.5pt, angle radius=0.22cm] {right angle = A--P--B};
+
+  % ---- angle theta between zenith and the ray at antenna 1 -------
+  \draw[guide] (A) -- (0,1.7) node[above, lbl] {};
+  \coordinate (Z) at (0,1);
+  \coordinate (S1) at ($(A)+(s)$);
+  \pic[draw=inksoft, line width=0.5pt, angle radius=1.05cm,
+       "$\theta$", angle eccentricity=1.3, font=\large] {angle = S1--A--Z};
+
+  % same angle between ground and wavefront at antenna 2
+  \pic[draw=inksoft, line width=0.5pt, angle radius=0.9cm,
+       "$\theta$", angle eccentricity=1.35, font=\large] {angle = P--B--A};
+
+  % ---- antennas --------------------------------------------------
+  \foreach \p/\n in {A/1, B/2}{
+    \draw[ant] ($(\p)+(-0.22,-0.32)$) rectangle ($(\p)+(0.22,0)$);
+    \node[lbl, below=0.4cm] at (\p) {Antenna \n};
+  }
+
+  % ---- baseline --------------------------------------------------
+  \draw[<->, inksoft, line width=0.6pt] (0,-1.15) -- (\dx,-1.15)
+    node[midway, below, lbl] {$\Delta x$};
+\end{tikzpicture}

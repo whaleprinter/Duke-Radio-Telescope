@@ -1,0 +1,19 @@
+# macOS / Python
+.DS_Store
+__pycache__/
+*.pyc
+
+# LaTeX build files (Fall 2026 Poster); poster.pdf itself is kept
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.xdv
+*.synctex.gz
+Fall 2026 Poster/figures/extra_path_standalone-1.pdf

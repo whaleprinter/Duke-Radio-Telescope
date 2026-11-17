@@ -5,7 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from scipy.signal import fftconvolve
-
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Fall 2026 Poster"))
+import poster_style as ps
+from pathlib import Path
+FIG_DIR = Path(__file__).resolve().parent.parent / "Fall 2026 Poster" / "figures"
 # --- 1. CLI Argument Parsing ---
 parser = argparse.ArgumentParser(description="Radio Telescope Array Simulator")
 parser.add_argument('-w', '--wavelength', type=float, default=0.21, help="Observing wavelength in meters (default: 0.21)")
@@ -76,7 +81,7 @@ for u, v in zip(u_coords, v_coords):
 psf /= len(u_coords) # Normalize
 
 # --- 5. Branch Logic: Convolution Mode vs. Interactive Mode ---
-
+ps.use()
 if args.convolve:
     # ====== CONVOLUTION MODE ======
     print(f"Loading target image: {args.convolve}")
@@ -96,34 +101,35 @@ if args.convolve:
     simulated_observation = fftconvolve(img_gray, psf_normalized, mode='same')
 
     # Plotting
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=ps.figsize(aspect=0.36))
     fig.canvas.manager.set_window_title('Convolution Simulation')
 
     ax1.imshow(img_gray, cmap='magma', origin='lower')
-    ax1.set_title('True Sky (Input)')
+    ax1.set_title('True Sky\n(Example Input)')
     ax1.axis('off')
 
     ax2.imshow(psf, cmap='inferno', origin='lower', extent=[-IMAGE_FOV_DEG/2, IMAGE_FOV_DEG/2, -IMAGE_FOV_DEG/2, IMAGE_FOV_DEG/2])
-    ax2.set_title('Point Spread Function')
+    ax2.set_title('Point Spread\nFunction')
     
     vmin, vmax = np.percentile(simulated_observation, [1, 99])
     ax3.imshow(simulated_observation, cmap='magma', origin='lower', vmin=vmin, vmax=vmax)
-    ax3.set_title('Simulated Observation (Dirty Image)')
+    ax3.set_title('Simulated Observation')
     ax3.axis('off')
 
     plt.tight_layout()
+    ps.save(fig, FIG_DIR / "convolution_simulation")
     plt.show()
 
 else:
     # ====== INTERACTIVE GUI MODE ======
     print("Launching Interactive UV GUI...")
-    fig = plt.figure(figsize=(15, 6))
+    fig = plt.figure(figsize=ps.figsize(aspect=0.42))
     fig.canvas.manager.set_window_title('Interactive UV Plane & Fringes')
 
     ax1 = fig.add_subplot(131)
     scatter_plot = ax1.scatter(u_coords, v_coords, color='blue', s=15, picker=True)
     highlight_dot, = ax1.plot([], [], 'ro', markersize=8)
-    ax1.set_title('UV Plane (Click a point!)')
+    ax1.set_title('UV Plane')
     ax1.axhline(0, color='gray', lw=0.5); ax1.axvline(0, color='gray', lw=0.5)
     ax1.axis('equal')
 
@@ -134,7 +140,7 @@ else:
 
     ax3 = fig.add_subplot(133)
     im3 = ax3.imshow(psf, extent=[-IMAGE_FOV_DEG/2, IMAGE_FOV_DEG/2, -IMAGE_FOV_DEG/2, IMAGE_FOV_DEG/2], origin='lower', cmap='inferno')
-    ax3.set_title('Final PSF (All Fringes Summed)')
+    ax3.set_title('Final PSF\n(All Fringes Summed)')
     fig.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
 
     def on_click(event):
@@ -148,4 +154,5 @@ else:
 
     fig.canvas.mpl_connect('button_press_event', on_click)
     plt.tight_layout()
+    ps.save(fig, FIG_DIR / "uv_plane_fringes")
     plt.show()

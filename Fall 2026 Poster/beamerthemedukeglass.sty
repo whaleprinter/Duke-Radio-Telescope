@@ -1,0 +1,298 @@
+% ==========================================================================
+%  beamerthemedukeglass.sty
+%  A quiet, paper-and-rule poster theme for beamerposter.
+%  Type: Instrument Serif (display) + Apple Garamond (text, EB Garamond fallback)
+%  Colour: warm paper ground, Duke Navy / Royal Blue structure, one rust accent
+%  Compile with LuaLaTeX (or XeLaTeX): fontspec is required.
+% ==========================================================================
+
+\ProvidesPackage{beamerthemedukeglass}[2026/11/15 Duke glass poster theme]
+
+\RequirePackage{fontspec}
+\RequirePackage{tikz}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{calc}
+\RequirePackage{etoolbox}
+\RequirePackage{booktabs}
+\RequirePackage{colortbl}
+\RequirePackage{qrcode}
+\usetikzlibrary{calc}
+
+% --------------------------------------------------------------------------
+%  Colour  (keep to these: paper, navy family, one rust accent)
+% --------------------------------------------------------------------------
+\definecolor{paper}{HTML}{F6EFE1}      % roshsun background
+\definecolor{ink}{HTML}{3F3429}        % roshsun body text (warm near-black)
+\definecolor{inksoft}{HTML}{6B5D50}    % captions, meta text
+\definecolor{rust}{HTML}{A12D10}       % roshsun accent -- use sparingly
+\definecolor{dukenavy}{HTML}{012169}   % Duke Navy Blue
+\definecolor{dukeroyal}{HTML}{00539B}  % Duke Royal Blue
+\definecolor{hairline}{HTML}{D8CFC2}   % roshsun line
+
+\setbeamercolor{background canvas}{bg=paper}
+\setbeamercolor{normal text}{fg=ink,bg=paper}
+\setbeamercolor{structure}{fg=dukeroyal}
+\setbeamercolor{title}{fg=dukenavy}
+\setbeamercolor{author}{fg=ink}
+\setbeamercolor{institute}{fg=inksoft}
+\setbeamercolor{caption}{fg=inksoft}
+\setbeamercolor{caption name}{fg=dukenavy}
+\setbeamercolor{itemize item}{fg=dukeroyal}
+\setbeamercolor{itemize subitem}{fg=dukeroyal!60}
+\setbeamercolor{enumerate item}{fg=dukeroyal}
+\setbeamercolor{bibliography item}{fg=dukeroyal}
+\setbeamercolor{bibliography entry author}{fg=ink}
+\setbeamercolor{bibliography entry title}{fg=ink}
+\setbeamercolor{bibliography entry location}{fg=inksoft}
+\setbeamercolor{bibliography entry note}{fg=inksoft}
+
+% --------------------------------------------------------------------------
+%  Type
+%  Text face: uses Apple Garamond if it is installed on this machine,
+%  otherwise the bundled EB Garamond in ./fonts.
+%  Display face: Instrument Serif (system copy if installed, else ./fonts).
+% --------------------------------------------------------------------------
+\usefonttheme{professionalfonts}
+
+\IfFontExistsTF{Apple Garamond}{%
+  \setmainfont{Apple Garamond}[Ligatures=TeX]
+  \setsansfont{Apple Garamond}[Ligatures=TeX]
+}{%
+  \setmainfont{EBGaramond}[
+    Path=./fonts/, Extension=.ttf, Ligatures=TeX, Numbers=OldStyle,
+    UprightFont=*-Regular, ItalicFont=*-Italic,
+    BoldFont=*-SemiBold, BoldItalicFont=*-SemiBoldItalic]
+  \setsansfont{EBGaramond}[
+    Path=./fonts/, Extension=.ttf, Ligatures=TeX, Numbers=OldStyle,
+    UprightFont=*-Regular, ItalicFont=*-Italic,
+    BoldFont=*-SemiBold, BoldItalicFont=*-SemiBoldItalic]
+}
+
+\IfFontExistsTF{Instrument Serif}{%
+  \newfontfamily\displayfont{Instrument Serif}
+}{%
+  \newfontfamily\displayfont{InstrumentSerif}[
+    Path=./fonts/, Extension=.ttf,
+    UprightFont=*-Regular, ItalicFont=*-Italic]
+}
+
+% Sizes follow the Duke Medical Center Library poster guide, at 100% scale:
+%   title >= 85pt, authors >= 56pt, subheadings >= 36pt,
+%   body >= 24pt, captions >= 18pt  (readable from ~10 ft)
+\renewcommand{\tiny}{\fontsize{20}{26}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{22}{29}\selectfont}
+\renewcommand{\footnotesize}{\fontsize{24}{32}\selectfont}   % captions, refs
+\renewcommand{\small}{\fontsize{28}{38}\selectfont}
+\renewcommand{\normalsize}{\fontsize{30}{42}\selectfont%      % body
+  \abovedisplayskip=28pt plus 6pt minus 6pt
+  \belowdisplayskip=28pt plus 6pt minus 6pt
+  \abovedisplayshortskip=14pt plus 4pt
+  \belowdisplayshortskip=20pt plus 4pt}
+\renewcommand{\large}{\fontsize{40}{52}\selectfont}
+\renewcommand{\Large}{\fontsize{48}{60}\selectfont}
+\renewcommand{\LARGE}{\fontsize{56}{66}\selectfont}          % block titles, authors
+\renewcommand{\huge}{\fontsize{80}{92}\selectfont}
+\renewcommand{\Huge}{\fontsize{112}{124}\selectfont}         % poster title
+\normalsize
+
+\setbeamerfont{title}{size=\Huge,family=\displayfont}
+\setbeamerfont{author}{size=\LARGE}
+\setbeamerfont{institute}{size=\large,shape=\itshape}
+\setbeamerfont{block title}{size=\LARGE,family=\displayfont}
+\setbeamerfont{heading}{size=\Large,family=\displayfont}
+\setbeamerfont{caption}{size=\footnotesize,shape=\itshape}
+\setbeamerfont{caption name}{size=\footnotesize,shape=\upshape}
+\setbeamerfont{footline}{size=\small}
+\setbeamerfont{bibliography item}{size=\footnotesize}
+\setbeamerfont{bibliography entry author}{size=\footnotesize}
+\setbeamerfont{bibliography entry title}{size=\footnotesize}
+\setbeamerfont{bibliography entry location}{size=\footnotesize}
+\setbeamerfont{bibliography entry note}{size=\footnotesize}
+
+% --------------------------------------------------------------------------
+%  Lengths
+% --------------------------------------------------------------------------
+\newlength{\blockrule}     \setlength{\blockrule}{7pt}    % heavy rule over each section
+\newlength{\glassgap}      \setlength{\glassgap}{1.5cm}   % space between sections
+\newlength{\posteredge}    \setlength{\posteredge}{2.8cm} % outer page margin
+
+\setbeamersize{text margin left=0pt, text margin right=0pt}
+\setbeamertemplate{navigation symbols}{}
+
+% --------------------------------------------------------------------------
+%  Background: flat pale Duke blue.
+% --------------------------------------------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \fill[dukeroyal!10!white] (0,0) rectangle (\paperwidth,\paperheight);
+  \end{tikzpicture}%
+}
+
+% --------------------------------------------------------------------------
+%  Sections: no box. Each block opens with a heavy full-width rule in
+%  Duke Navy (rust for alertblock), then the title, then the body.
+% --------------------------------------------------------------------------
+\tcbset{
+  section/.style={
+    enhanced, breakable=false, sharp corners,
+    frame hidden, interior hidden,
+    borderline north={\blockrule}{0pt}{#1},
+    left=0pt, right=0pt, top=0.9cm, bottom=0pt,
+    boxsep=0pt,
+    before skip=0pt, after skip=\glassgap,
+    fontupper=\normalsize, colupper=ink,
+  },
+  section/.default=dukenavy,
+}
+
+\newcommand{\glasstitle}[1]{%
+  {\usebeamerfont{block title}\color{dukenavy}#1\par}%
+  \vspace{0.6cm}%
+}
+
+\setbeamertemplate{block begin}{%
+  \begin{tcolorbox}[section]\glasstitle{\insertblocktitle}}
+\setbeamertemplate{block end}{\end{tcolorbox}}
+
+% alertblock: identical to block.
+\setbeamertemplate{block alerted begin}{%
+  \begin{tcolorbox}[section]\glasstitle{\insertblocktitle}}
+\setbeamertemplate{block alerted end}{\end{tcolorbox}}
+
+% exampleblock: identical to block.
+\setbeamertemplate{block example begin}{%
+  \begin{tcolorbox}[section]\glasstitle{\insertblocktitle}}
+\setbeamertemplate{block example end}{\end{tcolorbox}}
+
+% A sub-heading inside a block.
+\newcommand{\heading}[1]{%
+  \par\vspace{1.0cm}%
+  {\usebeamerfont{heading}\color{dukeroyal}#1\par}%
+  \vspace{0.5cm}}
+
+% --------------------------------------------------------------------------
+%  Lists, captions
+% --------------------------------------------------------------------------
+\setbeamertemplate{itemize item}{%
+  \raisebox{0.28em}{\tikz\fill[dukeroyal] (0,0) circle (0.22em);}}
+\setbeamertemplate{itemize subitem}{%
+  \raisebox{0.30em}{\tikz\draw[dukeroyal, line width=1.5pt] (0,0) circle (0.18em);}}
+\setbeamertemplate{enumerate item}{%
+  {\displayfont\color{dukeroyal}\insertenumlabel.}}
+\setlength{\leftmargini}{1.6em}
+\setlength{\leftmarginii}{1.4em}
+\setbeamertemplate{itemize/enumerate body begin}{\setlength{\itemsep}{0.5em}}
+
+\setbeamertemplate{caption}[numbered]
+\setlength{\abovecaptionskip}{0.5cm}
+\setlength{\belowcaptionskip}{0pt}
+\setbeamertemplate{caption label separator}{.\enspace}
+
+% bibliography: no icons
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+% run each reference on as one paragraph (beamer's default breaks per field)
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+
+% Table rules in navy
+\setlength{\heavyrulewidth}{2.5pt}
+\setlength{\lightrulewidth}{1.2pt}
+\renewcommand{\arraystretch}{1.25}
+\arrayrulecolor{dukenavy!70}
+
+% --------------------------------------------------------------------------
+%  Figures and placeholders
+%  \posterfigure[<height/width>]{<file>}{<placeholder label>}
+%     -- full column width; includes <file> if it
+%        exists, otherwise draws a labelled placeholder. Default aspect 0.5625
+%        (16:9). Use 0.75 for 4:3 photos, 0.3 for wide block diagrams.
+%        A real image keeps its own aspect ratio.
+%  \placeholder{<width>}{<height>}{<label>}
+% --------------------------------------------------------------------------
+\newcommand{\placeholder}[3]{%
+  \begin{tikzpicture}
+    \fill[white!60!dukeroyal!6!white] (0,0) rectangle (#1,#2);
+    \draw[dukeroyal!30, line width=2pt] (0,0) rectangle (#1,#2);
+    \node[align=center, text width=0.8*#1, text=inksoft, font=\small\itshape]
+      at ($(0,0)!0.5!(#1,#2)$) {#3};
+  \end{tikzpicture}}
+
+\newsavebox{\posterfigbox}
+\newcommand{\roundedimage}[2]{% width, file
+  \sbox{\posterfigbox}{\includegraphics[width=#1]{#2}}%
+  \usebox{\posterfigbox}}
+
+\newcommand{\posterfigure}[3][0.5625]{%
+  \IfFileExists{#2}%
+    {\roundedimage{\linewidth}{#2}}%
+    {\placeholder{\linewidth}{#1\linewidth}{#3}}}
+
+% --------------------------------------------------------------------------
+%  Header and footer
+% --------------------------------------------------------------------------
+\newcommand{\footercontent}[1]{\def\insertfootercontent{#1}}
+\def\insertfootercontent{}
+\newcommand{\logoleft}[1]{\def\insertlogoleft{#1}}
+\def\insertlogoleft{}
+\newcommand{\logoright}[1]{\def\insertlogoright{#1}}
+\def\insertlogoright{}
+
+\newlength{\headerinner}
+\newsavebox{\headerbox}
+% Header: two Duke Navy rounded "bubbles" inside the page margins -- the logo
+% (\logoleft, set in white) on the left, the centred title block on the right.
+% Both bubbles share one height (tcolorbox equal height group).
+\newlength{\logobubblewidth}  \setlength{\logobubblewidth}{0.17\paperwidth}
+\newlength{\bubblegap}        \setlength{\bubblegap}{1.6cm}
+\newlength{\bubbletop}        \setlength{\bubbletop}{2.0cm}   % page top -> bubbles
+\tcbset{
+  titlebubble/.style={
+    enhanced, nobeforeafter, box align=center,
+    colback=dukenavy, colframe=dukenavy, boxrule=0pt, arc=1.4cm,
+    left=1.4cm, right=1.4cm, top=1.3cm, bottom=1.3cm, boxsep=0pt,
+    valign=center, equal height group=posterheader,
+  },
+}
+\setbeamertemplate{headline}{%
+  \setlength{\headerinner}{\paperwidth-2\posteredge}%
+  \vspace*{\bubbletop}%
+  \hbox to \paperwidth{\hskip\posteredge
+    \begin{tcolorbox}[titlebubble, width=\logobubblewidth]
+      \centering\insertlogoleft
+    \end{tcolorbox}%
+    \hskip\bubblegap
+    \begin{tcolorbox}[titlebubble, width=\headerinner-\logobubblewidth-\bubblegap]
+      \centering
+      {\usebeamerfont{title}\color{white}\inserttitle\par}
+      \vspace{0.6cm}
+      {\usebeamerfont{author}\color{white}\insertauthor\par}
+      \vspace{0.3cm}
+      {\usebeamerfont{institute}\color{dukeroyal!25!white}\insertinstitute\par}
+    \end{tcolorbox}%
+  \hss}%
+  \vspace{\glassgap}%
+}
+
+% Footer: a hairline across the content width, small text beneath.
+\setbeamertemplate{footline}{%
+  \setlength{\headerinner}{\paperwidth-2\posteredge}%
+  \hbox to \paperwidth{\hfil\begin{minipage}{\headerinner}%
+    {\color{dukenavy}\rule{\linewidth}{2pt}}\par
+    \vspace{0.7cm}%
+    {\usebeamerfont{footline}\color{inksoft}\insertfootercontent\par}
+  \end{minipage}\hfil}%
+  \vspace{2.2cm}%
+}
+
+% QR code on a solid white rounded tile (scanners need contrast).
+\newcommand{\posterqr}[2][9cm]{%
+  \tikz\node[fill=white, inner sep=0.9cm]
+    {\color{dukenavy}\qrcode[height=#1]{#2}};}
+
+% --------------------------------------------------------------------------
+%  Links
+% --------------------------------------------------------------------------
+\hypersetup{colorlinks=true, linkcolor=dukeroyal, urlcolor=dukeroyal,
+            citecolor=dukeroyal}

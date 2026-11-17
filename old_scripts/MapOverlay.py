@@ -1,6 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import matplotlib.patheffects as pe
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Fall 2026 Poster"))
+import poster_style as ps
+FIG_DIR = Path(__file__).resolve().parent.parent / "Fall 2026 Poster" / "figures"
 
 # --- 1. Load Data ---
 try:
@@ -38,7 +44,8 @@ y_ft = y_raw * scale_factor
 print(f"Calibration successful: A1 to A2 distance is now {np.sqrt((x_ft[1] - x_ft[0])**2 + (y_ft[1] - y_ft[0])**2):.2f} feet.")
 
 # --- 4. Plotting and Image Overlay ---
-fig, ax = plt.subplots(figsize=(12, 10))
+ps.use()
+fig, ax = plt.subplots(figsize=ps.figsize(aspect=0.7))
 
 # ==========================================
 # CALIBRATION ZONE: Tweak these 4 numbers!
@@ -60,23 +67,33 @@ try:
 except FileNotFoundError:
     print("Warning: 'DukeMap.png' not found. Plotting points without background.")
 
-# Plot the scaled antennas as red dots on top (zorder=2 ensures they are above the image)
-ax.scatter(x_ft, y_ft, c='red', marker='o', s=80, edgecolor='black', zorder=2)
+# Plot the scaled antennas on top of the map
+ax.scatter(x_ft, y_ft, c=ps.ROYAL, marker='o', s=140, edgecolor='white', linewidth=1.5, zorder=3)
 
-# Label each antenna 
+# Label each antenna (A3's label goes to the right of its dot so it doesn't collide with A1)
+# Label each antenna with a white halo so it reads over the map
+halo = [pe.withStroke(linewidth=4, foreground='white')]
 for i in range(len(x_ft)):
-    ax.annotate(f"A{i+1}", (x_ft[i], y_ft[i]), textcoords="offset points", 
-                 xytext=(0, 8), ha='center', fontsize=10, fontweight='bold', 
-                 color='black', backgroundcolor='white')
+    ax.annotate(f"A{i+1}", (x_ft[i], y_ft[i]), textcoords="offset points",
+                xytext=(12, -8) if i == 2 else (0, 12),
+                ha='left' if i == 2 else 'center', fontsize=18, color=ps.NAVY,
+                path_effects=halo, zorder=4)
 
 # Graph styling
-ax.set_title('Interferometer Array Layout', fontsize=14)
-ax.set_xlabel('East-West Distance (feet)')
-ax.set_ylabel('North-South Distance (feet)')
+ps.title(ax, 'Interferometer Array Layout', pad=40)
+ax.set_xlabel('East-West Distance (ft)')
+ax.set_ylabel('North-South Distance (ft)')
 
-# Draw origin axes to clearly show Antenna 1 at (0,0)
-ax.axhline(0, color='yellow', linestyle='-', linewidth=1, zorder=3, alpha=0.5)
-ax.axvline(0, color='yellow', linestyle='-', linewidth=1, zorder=3, alpha=0.5)
+# Origin axes to clearly show Antenna 1 at (0,0)
+ax.axhline(0, color='white', linestyle='-', linewidth=1, zorder=2, alpha=0.6)
+ax.axvline(0, color='white', linestyle='-', linewidth=1, zorder=2, alpha=0.6)
 
-plt.axis('equal') # Prevents distortion
+# Equal scale, framed to the map's edges
+ax.set_aspect('equal')
+ax.set_xlim(img_left, img_right)
+ax.set_ylim(img_bottom, img_top)
+ax.grid(False)
+
+plt.tight_layout()
+ps.save(fig, FIG_DIR / "array_layout")
 plt.show()
