@@ -28,7 +28,7 @@
 
 \usepackage[size=custom, width=121.92, height=91.44, scale=1.0]{beamerposter}
 \usetheme{dukeglass}
-\usetikzlibrary{angles,quotes,arrows.meta}
+\usetikzlibrary{calc,angles,quotes,arrows.meta}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
@@ -109,46 +109,40 @@
     \begin{column}{\colwidth}
 
       \begin{block}{Motivation}
-        Radio astronomy is a practical means to understanding electromagnetic behavior and gaining hands-on experience with radio frequency (RF) hardware. We focused on neutral hydrogen (HI), which emits at 1420 MHz. We evaluated the feasibility of a radio telescope at Duke and simulated the performance of various configurations of receivers. We then studied the capabilities of a single antenna, acquired components, and verified them against their datasheets.
-
-        %   % \begin{figure}
-        %   %   \posterfigure[0.5]{figures/hero.jpg}{Hero image\\[0.2em]
-        %   %     \footnotesize e.g.\ the dish, the receiver bench, or the sky target}
-        %   %   \caption{[One-line caption.]}
-        %   % \end{figure}
+        
+        Radio astronomy is a hands-on way to learn electromagnetics and RF hardware. Our long-term goal is a Duke interferometer and a radio astronomy community around it that future students can extend. This semester we targeted neutral hydrogen (HI) at 1420~MHz: we simulated a single antenna and receiver chain and verified hardware against datasheets. Next semester, we will deploy the antenna and add two more to form a minimum viable array.
       \end{block}
 
       \begin{block}{Objectives}
         \textbf{Goal:} model an array of low-cost antennas across Duke's campus and deploy at scale.
-        \begin{enumerate}
-          \item \textbf{Build:} the 1\textsuperscript{st} iteration Duke Radio Telescope,
-                and a radio astronomy community around it.
-          \item \textbf{Simulate:} predict what the telescope should be able to see.
-          \item \textbf{Test:} compare hardware performance to simulation results.
+        \begin{enumerate}\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
+          \item \textbf{Build} the 1\textsuperscript{st} Duke Radio Telescope and a community around it.
+          \item \textbf{Simulate} what the telescope should be able to see.
+          \item \textbf{Test} hardware performance against simulation.
         \end{enumerate}
       \end{block}
 
 
       \begin{exampleblock}{Background}
-        \setlength{\abovedisplayskip}{14pt}\setlength{\belowdisplayskip}{14pt}%
-        \noindent\begin{minipage}[c]{0.58\linewidth}
-          \textbf{Resolution.} A dish of diameter $D$ resolves
+        \setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}%
+        \noindent\begin{minipage}[c]{0.57\linewidth}
+          \textbf{Resolution.} Following {\color{dukeroyal}[\refnumperley--\refnumtms]}, a dish of diameter $D$ resolves
           $\theta_{\text{rad}}\approx\lambda/D \;\Rightarrow\; \theta_{\text{arcsec}}\approx 2\lambda_{\text{cm}}/D_{\text{km}}$.
           An interferometer replaces $D$ with the separation between antennas.
 
           \textbf{Baseline.} Each antenna pair is a baseline along $\hat{\mathbf{x}}$:
           $\mathbf{b}=|\mathbf{b}|\,\hat{\mathbf{x}}$, $u=|\mathbf{b}|/\lambda$. A source in direction
-          $\mathbf{s}$ reaches one antenna later by the extra path $\mathbf{b}\cdot\mathbf{s}$
+          $\mathbf{s}$ reaches one antenna later because of the extra path $\mathbf{b}\cdot\mathbf{s}$
           (delay $\tau_g=\mathbf{b}\cdot\mathbf{s}/c$). Projecting $\mathbf{s}$ onto the baseline gives
           $\boldsymbol{l}=\hat{\mathbf{x}}\cdot\mathbf{s}=\sin\theta$; in 2-D,
           $\mathbf{b}\cdot\mathbf{s}/\lambda=u\boldsymbol{l}+v\boldsymbol{m}$.
         \end{minipage}\hfill
-        \begin{minipage}[c]{0.45\linewidth}
-          \includegraphics[width=\linewidth]{figures/extra_path_standalone-1.pdf}
+        \begin{minipage}[c]{0.41\linewidth}
+          \centering\input{figures/extra_path.tikz}
         \end{minipage}
 
         \textbf{Fringe.} The delay is a phase that changes with sky position, so each baseline
-        lays stripes $\lambda/|\mathbf{b}|$ apart across the sky:
+        produces stripes $\lambda/|\mathbf{b}|$ apart across the sky:
         $F(\boldsymbol{l},\boldsymbol{m})=\cos 2\pi(u\boldsymbol{l}+v\boldsymbol{m})$.
 
         \textbf{Correlation.} The correlator multiplies the two voltages and time-averages:
@@ -177,12 +171,12 @@
           =\underbrace{\mathcal{F}^{-1}\{S\}}_{B}\ast\underbrace{\mathcal{F}^{-1}\{V\}}_{I},
           \qquad B(\boldsymbol{l},\boldsymbol{m})=\sum_k\cos 2\pi(u_k\boldsymbol{l}+v_k\boldsymbol{m})
         \]
-        The PSF $B$ is the sum of every baseline's fringe; the observed image is the
+        The point spread function (PSF) $B$ is the sum of every baseline's fringe; the observed image is the
         true sky blurred by it.
       \end{exampleblock}
 
       \begin{tcolorbox}[section, top=0.4cm, bottom=0pt]
-        \tiny\setlength{\parskip}{0pt}\setlength{\parindent}{0pt}
+        \fontsize{20}{23}\selectfont\setlength{\parskip}{0pt}\setlength{\parindent}{0pt}% 20 pt, tighter leading
         {\large\displayfont\color{dukenavy}References}\par\vspace{0.1cm}
         \refitem{1}R.~Perley, \emph{Fundamentals of Radio Interferometry 1: The Basics}, CSIRO Radio School, Narrabri, NSW, 2023.\par
         \refitem{2}M.~MacGregor, \emph{Introduction to Radio Interferometry}, lecture slides, Carnegie DTM, 2018.\par
@@ -201,19 +195,19 @@
     \begin{column}{\colwidth}
 
       \begin{block}{Baseline Simulation}
-        In the Spring, we simulated the performance of an array with 16 anetnnas placed on various rooftops on campus. Each pair of receivers creates a baseline, of which there are 120. Each baseline gives a point and its mirror, or 240 points in the $uv$ plane in Fourier space. The PSF measures how the array responds to an ideal point source. With 16 antennas, the PSF has a sharp central peak with sidelobes that blur the simulated image.
+        Last semester, we simulated the performance of an array with 16 antennas placed on various rooftops on campus. Each pair of antennas creates a baseline, of which there are 120. Each baseline gives a point and its mirror, or 240 points in the $uv$ plane in Fourier space. The PSF measures how the array responds to an ideal point source. With 16 antennas, the PSF has a sharp central peak with sidelobes that blur the simulated image.
         \begin{figure}
           \includegraphics[width=\linewidth]{figures/array_simulation.pdf}
-          \caption{Selected antenna locations (approximate) on Duke campus transformed into Fourier space. Each baseline creates a fringe. All fringes sum to create the PSF, which blurs an example celestial body into the simulated observation. Sky: Antennae Galaxies, ESA/Hubble \& NASA (potw1345a). }
+          \caption{Selected antenna locations (approximate) on Duke campus transformed into Fourier space. Each baseline creates a fringe. All fringes sum to form the PSF, which blurs an example celestial body into the simulated observation. Sky: Antennae Galaxies, ESA/Hubble \& NASA (potw1345a).}
         \end{figure}
       \end{block}
 
       \begin{block}{Beam Path \& Observable Bodies}
-        This semester, we studied the capabilities of a single antenna: with only one receiver, what celestial bodies could we potentially observe? We built a program that would take in a location, antenna parameters, and receiver parameters to generate a beamwidth of the telescope, swept over a track in the sky as time progressed. We also identified potential sources in an astronomical database that would land in our telescope's ideal beam track.
+        This semester, we studied the capabilities of a single antenna: with only one receiver, what celestial bodies could we observe? We built a program that takes in a location, antenna parameters, and receiver parameters to generate the telescope's beam, swept over a track in the sky as time passes. We also identified potential sources in an astronomical database that would fall within our telescope's ideal beam track.
 
         \begin{figure}
           \includegraphics[width=0.6\linewidth]{figures/sky_galactic.pdf}
-          \caption{Expected object visibility simulation with a single dish on Fitzpatrick roof. Sources from NVSS \cite{nvss} and ALFALFA \cite{alfalfa}, named via SIMBAD \cite{simbad}.}
+          \caption{Expected object visibility for a single antenna on Fitzpatrick roof, in Galactic coordinates. Sources from NVSS \cite{nvss} and ALFALFA \cite{alfalfa}, named via SIMBAD \cite{simbad}.}
         \end{figure}
       \end{block}
 
@@ -246,10 +240,10 @@
             \SI{20}{\decibel} Attenuator & Attenuation & \SI{20}{\decibel} & \SI{20.2}{\decibel} \\
             \SI{30}{\decibel} Attenuator & Attenuation & \SI{30}{\decibel} & \SI{30.1}{\decibel} \\
             Filter & In-band insertion loss & \SI{3}{\decibel} & \SI{2.56}{\decibel} \\
-            Filter & \SI{-3}{\decibel} passband & \SIrange{1395}{1445}{\mega\hertz}
+            Filter & \SI{-3}{\decibel} pass band & \SIrange{1395}{1445}{\mega\hertz}
                    & \SIrange{1349}{1482}{\mega\hertz} \\
             LNA & Gain & \SI[retain-explicit-plus]{+19.81}{\decibel}
-                @ \SI{1400}{\mega\hertz} & \SI[retain-explicit-plus]{+19.91}{\decibel} \\
+                @ \SI{1400}{\mega\hertz} & \SI[retain-explicit-plus]{+19.91}{\decibel} @ \SI{1420}{\mega\hertz} \\
             \bottomrule
           \end{tabular}
         \end{center}
@@ -259,7 +253,7 @@
           \caption{LNA + filter chain in both orders: simulated vs.\ measured, within \SI{0.8}{\decibel} at \SI{1420}{\mega\hertz}.}
         \end{figure}
 
-        From our testing, we found that the current components are suitable for the first iteration of our RF chain. Of all components, the current filter deviated most from advertised specifications, especially regarding the pass band. A wider pass band admits more terrestrial noise around \SI{1420}{\mega\hertz}. We may purchase a filter with a narrower pass band if we deem this model to be insufficiently capable.
+        We found that the current components are suitable for the first iteration of our RF chain. Of these, the filter deviated most from advertised specifications, especially regarding the pass band. A wider pass band admits more terrestrial noise around \SI{1420}{\mega\hertz}. We may purchase a filter with a narrower pass band if it proves inadequate.
       \end{block}
 
 
@@ -273,7 +267,7 @@
       \end{block}
 
       \begin{block}{Acknowledgements}
-        I would like to thank Professor Michael Gehm for his continued support on this project and for getting me interested in RF systems in ECE270!
+        We would like to thank Professor Michael Gehm for his continued support on this project and for getting us interested in RF systems in ECE~270!
       \end{block}
 
     \end{column}

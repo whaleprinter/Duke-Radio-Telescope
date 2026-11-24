@@ -190,7 +190,7 @@ def build_figure(args):
     ax_uv.set_xlabel(r"$u$ (k$\lambda$)")
     ax_uv.set_ylabel(r"$v$ (k$\lambda$)")
     ax_uv.grid(False)
-    ps.title(ax_uv, "UV plane")
+    ps.title(ax_uv, r"$uv$ plane")
 
     # 3. Example fringe from the highlighted baseline
     ax_fr.imshow(ex_fringe, extent=ext, origin="lower", cmap="RdBu_r", vmin=-1, vmax=1)
@@ -239,10 +239,12 @@ def main():
 
     fig, ps, plt = build_figure(args)
 
-    saved = [ps.save(fig, HERE / OUT_NAME),
+    # The map and sky panels are bitmaps, which the PDF stores at the save
+    # dpi: 300 keeps them sharp in print (a panel is ~3.6 in wide on the poster).
+    saved = [ps.save(fig, HERE / OUT_NAME, dpi=300),
              ps.save(fig, HERE / f"{OUT_NAME}.png", dpi=200)]
     if not args.no_poster:
-        saved.append(ps.save(fig, POSTER_FIG_DIR / OUT_NAME))
+        saved.append(ps.save(fig, POSTER_FIG_DIR / OUT_NAME, dpi=300))
     print("Saved:")
     for path in saved:
         print("  ", path)
