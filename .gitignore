@@ -17,3 +17,6 @@ __pycache__/
 *.xdv
 *.synctex.gz
 Fall 2026 Poster/figures/extra_path_standalone-1.pdf
+
+# Personal paperwork: keep out of the public repo
+*Receipt*.pdf
