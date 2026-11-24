@@ -1,0 +1,22 @@
+# macOS / Python
+.DS_Store
+__pycache__/
+*.pyc
+
+# LaTeX build files (posters/); poster.pdf itself is kept
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.xdv
+*.synctex.gz
+posters/*/figures/extra_path_standalone-1.pdf
+
+# Personal paperwork: keep out of the public repo
+*Receipt*.pdf

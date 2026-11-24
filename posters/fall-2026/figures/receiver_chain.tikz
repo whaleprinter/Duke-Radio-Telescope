@@ -1,0 +1,41 @@
+% Receiver chain: antenna -> feed cable -> LNA -> filter -> SDR/VNA
+% Drawn at real size for one poster column (~37 cm); use \input, not \resizebox.
+% Needs: calc (loaded by the theme).
+\begin{tikzpicture}[
+    >=stealth,
+    stage/.style={draw=dukenavy, fill=white, line width=2pt,
+                  minimum height=3.2cm, minimum width=6.2cm,
+                  align=center, font=\footnotesize, text=ink, inner sep=0.2cm},
+    untested/.style={dash pattern=on 10pt off 7pt},
+    link/.style={->, dukeroyal, line width=2.5pt, shorten >=2pt, shorten <=2pt},
+    note/.style={font=\scriptsize\itshape, text=inksoft, align=center},
+  ]
+  \def\gap{1.5}  % arrow length between stages (cm)
+
+  % ---- antenna (not yet tested in hardware) ----------------------
+  \node[stage, untested, minimum width=3.6cm] (ant) at (0,0) {};
+  \begin{scope}[shift={(ant.center)}, dukenavy, line width=2.5pt, line cap=round]
+    \draw (0,-1.1) -- (0,0.35);            % mast
+    \draw (0,0.35) -- (-0.9,1.15);         % V elements
+    \draw (0,0.35) -- (0.9,1.15);
+    \draw (-0.55,-1.1) -- (0.55,-1.1);     % ground
+  \end{scope}
+
+
+  % ---- the rest of the chain -------------------------------------
+  \node[stage, anchor=west] (cab) at ($(ant.east)+(\gap,0)$) {Feed\\Cable};
+  \node[stage, anchor=west] (lna) at ($(cab.east)+(\gap,0)$) {Low-Noise\\Amplifier};
+  \node[stage, anchor=west] (fil) at ($(lna.east)+(\gap,0)$) {Band Pass\\Filter};
+  \node[stage, anchor=west, fill=dukenavy, text=white] (sdr)
+    at ($(fil.east)+(\gap,0)$) {Software-Defined\\Radio};
+
+  % ---- part numbers under each stage ------------------------------
+  \foreach \n/\t in {cab/{$50 \Omega$ Coaxial Cable},
+                      lna/{Mini-Circuits\\ZX60-P162LN+},
+                      fil/{GPIO Labs\\\SI{1420}{\mega\hertz} BPF},
+                      sdr/{RTL-SDR v3}}
+    \node[note, anchor=north] at ($(\n.south)+(0,-0.25)$) {\t};
+
+  \foreach \a/\b in {ant/cab, cab/lna, lna/fil, fil/sdr}
+    \draw[link] (\a.east) -- (\b.west);
+\end{tikzpicture}

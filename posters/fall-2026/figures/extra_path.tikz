@@ -1,0 +1,73 @@
+% Extra path between two antennas for a tilted plane wave (Background block).
+% Side view: baseline b along x-hat, unit vector s toward the source.
+%
+% Drawn at its printed size (about 14.5 x 8.5 cm), so do NOT \resizebox it: the
+% labels are \scriptsize, which the poster theme makes 22 pt (>= 18 pt to read
+% on a wall). Labels are kept short; the equations live in the text beside it.
+% In the poster:  \input{figures/extra_path.tikz}
+% Needs: \usetikzlibrary{calc,angles,quotes,arrows.meta}
+\providecolor{dukeroyal}{HTML}{00539B}
+\providecolor{dukenavy}{HTML}{012169}
+\providecolor{rust}{HTML}{A12D10}
+\providecolor{inksoft}{HTML}{6B5D50}
+\begin{tikzpicture}[
+    x=1.14cm, y=1.14cm,
+    font=\scriptsize,
+    >={Stealth[length=10pt, width=8pt]},
+    ray/.style={dukeroyal, line width=1.6pt},
+    front/.style={dukeroyal, dash pattern=on 8pt off 6pt, line width=1.4pt},
+    ant/.style={fill=dukenavy!15, draw=dukenavy, line width=1.2pt},
+  ]
+  % ---- parameters -------------------------------------------------
+  \def\th{25}      % source angle from zenith (deg)
+  \def\bl{8}       % |b|, antenna spacing (cm on the poster)
+  \def\sl{2.6}     % drawn length of the unit vector s
+  \coordinate (s) at ({sin(\th)},{cos(\th)});          % unit vector to the source
+
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (\bl,0);
+  \coordinate (P) at ($(A)!{\bl*sin(\th)}!($(A)+(s)$)$);   % wavefront meets ray 1
+  \coordinate (S) at ($(A)+\sl*(s)$);                       % tip of s
+  \coordinate (Sx) at ($(S |- A)$);                         % s projected on the ground
+  \coordinate (n) at ({-cos(\th)},{sin(\th)});              % normal to the ray, to the left
+
+  % ---- ground ------------------------------------------------------
+  \draw[inksoft, line width=1.2pt] (-1.2,0) -- (\bl+1,0);
+
+  % ---- wavefront through antenna 2, perpendicular to s -------------
+  \draw[front] ($(P)!-0.18!(B)$) -- ($(B)!-0.12!(P)$);
+  \node[text=dukeroyal, anchor=south west, inner sep=3pt, rotate=-\th]
+    at ($(P)!0.45!(B)$) {wavefront};
+
+  % ---- incoming rays (parallel, from the distant source) -----------
+  \draw[ray] (A) -- ($(A)+5.4*(s)$);
+  \draw[ray, ->] ($(B)+4.2*(s)$) -- (B);
+  \node[text=dukeroyal, anchor=south] at ($(B)+4.2*(s)$) {source};
+  \pic[draw=dukeroyal, line width=1pt, angle radius=0.32cm] {right angle = A--P--B};
+
+  % ---- extra path b.s, offset to the left of ray 1 -----------------
+  \draw[rust, line width=2pt, {Bar[width=12pt]Stealth[length=9pt]}-{Stealth[length=9pt]Bar[width=12pt]}]
+    ($(A)+0.45*(n)$) -- ($(P)+0.45*(n)$);
+  \node[text=rust, anchor=east, align=right, inner sep=0pt]
+    at ($(A)!0.6!(P)+0.95*(n)$) {extra path\\$\mathbf{b}\cdot\mathbf{s}$};
+
+  % ---- the unit vector s and its projection l on the baseline -----
+  \draw[dukenavy, dotted, line width=1.6pt] (S) -- (Sx);
+  \draw[dukenavy, line width=3.2pt, ->] (A) -- (S)
+    node[right=3pt, text=dukenavy] {$\mathbf{s}$};
+  % theta (from zenith) is also the angle between the wavefront and the ground
+  \pic[draw=inksoft, line width=1pt, angle radius=1.9cm,
+       "$\theta$", angle eccentricity=1.22] {angle = P--B--A};
+  \draw[dukenavy, line width=4pt] (A) -- (Sx);
+  \node[text=dukenavy, anchor=north west, inner sep=2pt] at ($(Sx)+(0.05,-0.02)$) {$\boldsymbol{l}$};
+
+  % ---- antennas ----------------------------------------------------
+  \foreach \p/\n in {A/1, B/2}{
+    \draw[ant] ($(\p)+(-0.35,-0.5)$) rectangle ($(\p)+(0.35,0)$);
+    \node[text=inksoft, anchor=north] at ($(\p)+(0,-0.55)$) {Antenna \n};
+  }
+
+  % ---- baseline ----------------------------------------------------
+  \draw[inksoft, line width=1.6pt, ->] (0,-1.75) -- (\bl,-1.75)
+    node[midway, below=1pt, text=inksoft] {$\mathbf{b}$};
+\end{tikzpicture}
