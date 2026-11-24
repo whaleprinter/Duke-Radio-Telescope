@@ -2,12 +2,12 @@
 
 Put this file in the poster folder (next to fonts/). In any plotting script:
 
-    import sys; sys.path.insert(0, "/Users/roshan/Documents/School/Telescope/Capability Calculator/Fall 2026 Poster")
+    import sys; sys.path.insert(0, "/Users/roshan/Documents/School/Telescope/Duke-Radio-Telescope/posters/fall-2026")
     import poster_style
     poster_style.use()                                  # after any other style/theme setup
     fig, ax = plt.subplots(figsize=poster_style.figsize(aspect=0.55))
     ...
-    poster_style.save(fig, "Fall 2026 Poster/figures/noise_budget")   # -> .pdf, transparent
+    poster_style.save(fig, "posters/fall-2026/figures/noise_budget")   # -> .pdf, transparent
 
 What it does
   1. Transparent background: figure, axes and saved file have no fill, so the

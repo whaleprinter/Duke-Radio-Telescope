@@ -14,7 +14,7 @@ It draws six panels in a 2 x 3 grid, in the order the poster tells the story:
 and saves them as one figure to
 
     ./array_simulation.pdf and ./array_simulation.png   (this folder)
-    ./Fall 2026 Poster/figures/array_simulation.pdf     (the poster)
+    ../posters/fall-2026/figures/array_simulation.pdf   (the poster)
 
 Styling comes from poster_style.py in the poster folder, so fonts, colours and
 transparent background match the poster. The figure is drawn at the full block
@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-POSTER_DIR = HERE / "Fall 2026 Poster"
+POSTER_DIR = HERE.parent / "posters" / "fall-2026"
 POSTER_FIG_DIR = POSTER_DIR / "figures"
 OUT_NAME = "array_simulation"
 

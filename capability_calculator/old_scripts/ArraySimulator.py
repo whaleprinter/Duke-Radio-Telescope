@@ -7,10 +7,10 @@ import matplotlib.image as mpimg
 from scipy.signal import fftconvolve
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Fall 2026 Poster"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "posters" / "fall-2026"))
 import poster_style as ps
 from pathlib import Path
-FIG_DIR = Path(__file__).resolve().parent.parent / "Fall 2026 Poster" / "figures"
+FIG_DIR = Path(__file__).resolve().parents[2] / "posters" / "fall-2026" / "figures"
 # --- 1. CLI Argument Parsing ---
 parser = argparse.ArgumentParser(description="Radio Telescope Array Simulator")
 parser.add_argument('-w', '--wavelength', type=float, default=0.21, help="Observing wavelength in meters (default: 0.21)")

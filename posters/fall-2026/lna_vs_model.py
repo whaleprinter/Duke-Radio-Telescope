@@ -1,7 +1,7 @@
 """Measured LNA gain (NanoVNA) vs. the hardware model, styled for the poster.
 
-Run from anywhere:  python3 "Fall 2026 Poster/lna_vs_model.py"
-Writes:             Fall 2026 Poster/figures/lna_vs_model.pdf  (transparent)
+Run from anywhere:  python3 posters/fall-2026/lna_vs_model.py
+Writes:             posters/fall-2026/figures/lna_vs_model.pdf  (transparent)
 """
 from pathlib import Path
 
@@ -14,7 +14,7 @@ import pandas as pd
 import poster_style as ps
 
 POSTER = Path(__file__).resolve().parent
-TELESCOPE = POSTER.parent.parent   # Fall 2026 Poster -> Capability Calculator -> Telescope
+TELESCOPE = POSTER.parents[2]   # fall-2026 -> posters -> Duke-Radio-Telescope -> Telescope
 MEASURED = TELESCOPE / "NanoVNA/Parts_Verification/LNA_30_20_11-14-2026-15h14/S21_LNA_30_20_11-14-2026-15h14.csv"
 MODEL = TELESCOPE / "Coordinates Plotter/hardware_model/output/bench/lna/expected_s21.csv"
 F0 = 1420.405751768  # MHz

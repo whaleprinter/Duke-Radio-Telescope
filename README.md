@@ -1,41 +1,13 @@
-# Duke Radio Telescope: Capability Calculator
+# Duke Radio Telescope
 
-## Poster figure (one command)
+Simulation code and posters for the Duke Radio Telescope project
+(Pierre R. Lamond Department of Electrical and Computer Engineering, Duke University).
 
-```bash
-python3 poster_figure.py
-```
-
-This produces one 2 × 3 figure: array geometry on the campus map, the UV plane,
-an example fringe, the PSF, the example true sky, and the simulated observation.
-It is saved to:
-
-- `array_simulation.pdf` and `array_simulation.png` in this folder
-- `Fall 2026 Poster/figures/array_simulation.pdf` for the poster
-
-The style (fonts, colours, transparent background) comes from
-`Fall 2026 Poster/poster_style.py`. The figure is drawn at full block width,
-so include it with `\includegraphics[width=\linewidth]{figures/array_simulation.pdf}`.
-
-Useful options (`python3 poster_figure.py -h` lists them all):
-
-| option | what it does |
+| folder | what's in it |
 |---|---|
-| `-w 0.21` | observing wavelength in metres |
-| `-b 3 4` | which antenna pair's fringe to show (highlighted on the map and UV plane) |
-| `--font-pt 22` | axis-label size on the printed poster |
-| `--aspect 0.70` | figure height ÷ width |
-| `--no-poster` | only save in this folder |
-| `--show` | open a window after saving |
+| [`capability_calculator/`](capability_calculator/) | Array simulation: antenna layout, uv coverage, fringes, PSF and a simulated observation. `python3 capability_calculator/poster_figure.py` makes the poster's Figure 1. |
+| [`posters/fall-2026/`](posters/fall-2026/) | Fall 2026 research poster (48 × 36 in): LaTeX source, theme, fonts, logos and figures. Build with `latexmk -xelatex poster.tex` inside that folder. |
 
-## Inputs
-
-- `antenna_locations.txt`: one `lat, lon` per line; A1 is the first line
-- `DukeMap.png`: campus map background
-- `Galaxy.jpg`: example sky used for the simulated observation
-
-## Other tools
-
-- `telescope_calc.c` / `telescope`: C capability calculator (resolution, FOV)
-- `ConfigurationPlotter.py`: resolution and FOV sweeps, built on `./telescope`
-- `old_scripts/`: earlier single-panel scripts, replaced by `poster_figure.py`
+The galactic sky map and receiver-chain figures are made by the companion repo
+[telescope-coordinates-plotter](https://github.com/whaleprinter/telescope-coordinates-plotter)
+(`poster_figures.py`), which expects this repo checked out next to it as `Duke-Radio-Telescope/`.

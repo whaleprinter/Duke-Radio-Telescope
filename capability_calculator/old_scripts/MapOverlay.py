@@ -4,9 +4,9 @@ import matplotlib.image as mpimg
 import matplotlib.patheffects as pe
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "Fall 2026 Poster"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "posters" / "fall-2026"))
 import poster_style as ps
-FIG_DIR = Path(__file__).resolve().parent.parent / "Fall 2026 Poster" / "figures"
+FIG_DIR = Path(__file__).resolve().parents[2] / "posters" / "fall-2026" / "figures"
 
 # --- 1. Load Data ---
 try:
